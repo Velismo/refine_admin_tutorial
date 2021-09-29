@@ -1,31 +1,31 @@
-import { Refine } from "@pankod/refine";
+import { Refine, Resource } from "@pankod/refine";
+import dataProvider from "@pankod/refine-simple-rest";
+
+import { authProvider } from "authProvider";
+
+import { PostList } from "./pages/list";
+import { PostShow } from "./pages/show";
+import { PostEdit } from "./pages/edit";
+import { PostCreate } from "./pages/create";
 
 import "@pankod/refine/dist/styles.min.css";
-import simpleRestDataProvider from "@pankod/refine-simple-rest";
-import { authProvider } from "authProvider";
-import { useTranslation } from "react-i18next";
-import { Header } from "components";
-
-function App() {
-  const { t, i18n } = useTranslation();
-
-  const API_URL = "https://api.fake-rest.refine.dev";
-  const dataProvider = simpleRestDataProvider(API_URL);
-
-  const i18nProvider = {
-    translate: (key: string, params: object) => t(key, params),
-    changeLocale: (lang: string) => i18n.changeLanguage(lang),
-    getLocale: () => i18n.language,
-  };
-
-  return (
-    <Refine
-      dataProvider={dataProvider}
-      authProvider={authProvider}
-      i18nProvider={i18nProvider}
-      Header={Header}
-    ></Refine>
-  );
-}
-
+ 
+const App: React.FC = () => {
+    return (
+        <Refine
+          authProvider={authProvider}
+          dataProvider={dataProvider("https://api.fake-rest.refine.dev")}
+        >
+          <Resource 
+            name="posts" 
+            list={PostList}
+            show={PostShow}
+            edit={PostEdit}
+            create={PostCreate}
+            canDelete
+          />
+        </Refine>
+    );
+};
+ 
 export default App;
